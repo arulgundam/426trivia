@@ -80,26 +80,24 @@ const App = () => {
     fetchQuestions();
   };
 
-  return React.createElement(
-    "div",
-    null,
-    !loggedIn
-      ? React.createElement(LoginForm, {
-          username,
-          setUsername,
-          onRegister: handleRegister,
-        })
-      : currentQuestion < questions.length
-      ? React.createElement(Quiz, {
-          questions,
-          currentQuestion,
-          handleAnswer,
-        })
-      : React.createElement(Results, {
-          score,
-          userData,
-          restartQuiz,
-        })
+  return (
+    <div>
+      {!loggedIn ? (
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          onRegister={handleRegister}
+        />
+      ) : currentQuestion < questions.length ? (
+        <Quiz
+          questions={questions}
+          currentQuestion={currentQuestion}
+          handleAnswer={handleAnswer}
+        />
+      ) : (
+        <Results score={score} userData={userData} restartQuiz={restartQuiz} />
+      )}
+    </div>
   );
 };
 
