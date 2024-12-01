@@ -8,10 +8,13 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-connectDB();
+connectDB(); //do we need this?
 
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { 
+        username, 
+        password 
+    } = req.body;
 
   if (!username || !password) {
     return res.status(400).send({ error: "Username and password are required." });
@@ -36,15 +39,21 @@ app.put('/update-score', async (req, res) => {
     }
 });
 
-app.post('/nodes', async (req, res) => {
-});
+app.get('/points/:username', async (req, res) => {
+    let username = req.params.username;
 
-app.put('/nodes/:id', async (req, res) => {
-});
+    if (!username) {
+        return res.status(400).send("Username does not exist.");
+    }
 
-app.get('/parents/:id', async (req, res) => {
-});
+    let node = await db.get("SELECT points FROM users WHERE username = ?", [username]);
 
+    if (!node) {
+        return res.status(400).send("Player does not have any points yet.")
+    }
+
+    return res.send(node.points);
+});
 app.listen(port, () => {
     console.log('Running...');
 })
