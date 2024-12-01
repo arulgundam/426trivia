@@ -55,6 +55,23 @@ app.get('/points/:username', async (req, res) => {
     return res.send(node.points);
 });
 
+app.delete('/username', async (req, res) => {
+    let username = req.body.username;
+
+    if (!username) {
+        return res.status(400).send("Username does not exist.");
+    }
+
+    let node = await db.get("SELECT username FROM users WHERE username = ?", [username]);
+
+    if (!node) {
+        return res.status(400).send("Player does not have any points yet.")
+    }
+
+    await db.run("DELETE FROM users WHERE username = ?", [username]);
+    return res.status(200).send("User deleted successfully.");
+});
+
 
 app.listen(port, () => {
     console.log('Running...');
