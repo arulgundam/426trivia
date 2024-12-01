@@ -54,6 +54,8 @@ app.get('/points/:username', async (req, res) => {
 
     return res.send(node.points);
 });
+
+
 app.listen(port, () => {
     console.log('Running...');
 })
