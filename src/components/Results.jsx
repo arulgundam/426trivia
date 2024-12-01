@@ -1,6 +1,6 @@
 import React from "react";
 
-const Results = ({ score, userData, restartQuiz }) => {
+const Results = ({ score, userData, restartQuiz, goToHome }) => {
   const categoryPoints = Object.entries(userData.categoryPoints).map(
     ([category, points]) => (
       <li key={category}>{`${category}: ${points}`}</li>
@@ -24,6 +24,7 @@ const Results = ({ score, userData, restartQuiz }) => {
       <h3>Correct Answers:</h3>
       <ul>{correctAnswers}</ul>
       <button onClick={restartQuiz}>Play Again</button>
+      <button onClick={goToHome}>Home Page</button>
     </div>
   );
 };

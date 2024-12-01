@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import Quiz from "./components/Quiz";
 import Results from "./components/Results";
+import Profile from "./components/Profile";
+
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -10,6 +12,7 @@ const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [userData, setUserData] = useState(null);
+  const [currentPage, setCurrentPage] = useState("home"); 
 
   const initializeUserData = () => {
     const data = JSON.parse(localStorage.getItem(username));
@@ -80,25 +83,47 @@ const App = () => {
     fetchQuestions();
   };
 
-  return (
-    <div>
-      {!loggedIn ? (
-        <LoginForm
-          username={username}
-          setUsername={setUsername}
-          onRegister={handleRegister}
-        />
-      ) : currentQuestion < questions.length ? (
-        <Quiz
-          questions={questions}
-          currentQuestion={currentQuestion}
-          handleAnswer={handleAnswer}
-        />
-      ) : (
-        <Results score={score} userData={userData} restartQuiz={restartQuiz} />
-      )}
-    </div>
-  );
+  const goToQuiz = () => setCurrentPage("quiz");
+  const goToProfile = () => setCurrentPage("profile");
+  const goToHome = () => setCurrentPage("home");
+
+  if (!loggedIn) {
+    return (
+      <LoginForm
+        username={username}
+        setUsername={setUsername}
+        onRegister={handleRegister}
+      />
+    );
+  }
+
+  if (currentPage === "home") {
+    return (
+      <div>
+        <h1>Welcome, {username}!</h1>
+        <button onClick={goToQuiz}>Take Quiz</button>
+        <button onClick={goToProfile}>Visit Profile</button>
+      </div>
+    );
+  }
+
+  if (currentPage === "profile") {
+    return <Profile username={username} userData={userData} goToHome={goToHome} />;
+  }
+
+  if (currentPage === "quiz") {
+    return currentQuestion < questions.length ? (
+      <Quiz
+        questions={questions}
+        currentQuestion={currentQuestion}
+        handleAnswer={handleAnswer}
+      />
+    ) : (
+      <Results score={score} userData={userData} restartQuiz={restartQuiz} goToHome={goToHome} />
+    );
+  }
+
+  return null;
 };
 
 export default App;
