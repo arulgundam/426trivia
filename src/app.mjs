@@ -8,10 +8,32 @@ const port = 3000;
 
 app.use(bodyParser.json());
 
-app.get('/nodes', async (req, res) => {
+connectDB();
+
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).send({ error: "Username and password are required." });
+  }
+
+  try {
+    const newUser = new User({ username, password });
+    await newUser.save();
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).send({ error: "Username already exists." });
+    }
+  }
+
 });
 
-app.get('/nodes/:id', async (req, res) => {
+app.put('/update-score', async (req, res) => {
+    const { username, points } = req.body;
+
+    if (!username || points === undefined) {
+        return res.status(400).send({error: "username and points required."})
+    }
 });
 
 app.post('/nodes', async (req, res) => {

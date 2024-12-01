@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 
 const App = () => {
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -29,13 +30,53 @@ const App = () => {
     }
   };
 
-  const handleRegister = () => {
-    if (!username.trim()) {
-      alert("Please enter a valid username.");
+  const handleRegister = async () => {
+    if (!username.trim() || !password.trim()) {
+      alert("Please enter a valid username and password.");
       return;
     }
-    setLoggedIn(true);
+
+    try {
+      const response = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: {"Content-Type": "application/json" },
+      body: JSON.stringify({username, password}),
+      });
+
+      if(response.ok) {
+        setLoggedIn(true);
     initializeUserData();
+      } else {
+        const error = await response.json();
+        alert(error.error);
+      }
+    } catch (error) {
+      alert("error");
+    }
+  
+  };
+
+  const handleLogin = async () => {
+    if (!username.trim() || !password.trim()) {
+      alert("Please enter a valid username.");
+      return
+    } try {
+      const response = await fetch ("http://localhost:3000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+      });
+      if (response.ok) {
+        const { user } = await response.json();
+        setUserData(user);
+        setLoggedIn(true);
+      } else {
+        const error = await response.json();
+        alert(error.error);
+      }
+    } catch (error) {
+      alert("Error logging in.");
+    }
   };
 
   const fetchQuestions = async () => {
@@ -44,7 +85,7 @@ const App = () => {
     setQuestions(data.results);
   };
 
-  const handleAnswer = (selectedAnswer) => {
+  const handleAnswer = async (selectedAnswer) => {
     const currentQ = questions[currentQuestion];
     const isCorrect = selectedAnswer === currentQ.correct_answer;
     const difficulty = currentQ.difficulty;
@@ -68,10 +109,27 @@ const App = () => {
       setUserData(updatedData);
       localStorage.setItem(username, JSON.stringify(updatedData));
       setScore(score + points);
-    }
 
-    setCurrentQuestion(currentQuestion + 1);
-  };
+      // backend
+      try {
+        const response = await fetch("http://localhost:3000/update-score", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, points }),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to update score on the server.");
+        }
+  
+        console.log("Score updated successfully on the server.");
+      } catch (error) {
+        console.error("Error updating score:", error);
+      }
+  }
+  setCurrentQuestion(currentQuestion + 1);
+};
+
 
   useEffect(() => {
     if (loggedIn) fetchQuestions();
@@ -92,7 +150,10 @@ const App = () => {
       <LoginForm
         username={username}
         setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
         onRegister={handleRegister}
+        onLogin={handleLogin}
       />
     );
   }
