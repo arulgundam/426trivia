@@ -13,7 +13,22 @@ app.get('/', (req, res) => {
     res.send('Server is up and running!');
   });
 
+app.get('/login', async (req, res) => {
+    let username = req.body.password;
+    let password = req.body.password;
 
+    if (!username || !password) {
+        return res.status(400).send("Username and password are required.");
+    }
+
+    let node = await db.get("SELECT username, password FROM users WHERE username = ? AND password = ?", [username, password]);
+
+    if (!node) {
+        return res.status(400).send("Player does not exiset")
+    }
+
+    return res.status(200).send("Successful login");
+})
 app.post('/register', async (req, res) => {
     const { 
         username, 

@@ -62,7 +62,7 @@ const App = () => {
       return
     } try {
       const response = await fetch ("http://localhost:3001/login", {
-        method: "POST",
+        method: "GET",
         headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
       });
