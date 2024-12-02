@@ -9,26 +9,33 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    res.send('Server is up and running!');
-  });
-
 app.get('/login', async (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
+    const { username, password } = req.query; // Extract from query parameters
+
+    console.log("Username: " + username);
+    console.log("Pass: " + password);
 
     if (!username || !password) {
-        return res.status(400).send("Username and password are required.");
+        return res.status(400).send({ error: "Username and password are required." });
     }
 
-    let node = await db.get("SELECT username, password FROM users WHERE username = ? AND password = ?", [username, password]);
+    try {
+        const user = await db.get(
+            "SELECT username, password FROM users WHERE username = ? AND password = ?", 
+            [username, password]
+        );
 
-    if (!node) {
-        return res.status(400).send("Player does not exist");
+        if (!user) {
+            return res.status(404).send({ error: "Invalid username or password." });
+        }
+
+        return res.status(200).send({ user: { username: user.username } });
+    } catch (error) {
+        console.error("Error during login:", error);
+        return res.status(500).send({ error: "An error occurred while processing the login." });
     }
+});
 
-    return res.status(200).send("Successful login");
-})
 app.post('/register', async (req, res) => {
     const { 
         username, 

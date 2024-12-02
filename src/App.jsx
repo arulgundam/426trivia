@@ -12,21 +12,19 @@ const App = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [userData, setUserData] = useState(null);
-  const [currentPage, setCurrentPage] = useState("home"); 
+  const [currentPage, setCurrentPage] = useState("home");
 
   const initializeUserData = () => {
-    const data = JSON.parse(localStorage.getItem(username));
-    if (data) {
-      setUserData(data);
-    } else {
-      const initialData = {
-        totalPoints: 0,
-        categoryPoints: {},
-        correctAnswers: [],
-      };
-      localStorage.setItem(username, JSON.stringify(initialData));
-      setUserData(initialData);
-    }
+    const storedData = JSON.parse(localStorage.getItem(username));
+    const initialData = {
+      totalPoints: 0,
+      categoryPoints: {},
+      correctAnswers: [],
+    };
+
+    const mergedData = { ...initialData, ...storedData };
+    localStorage.setItem(username, JSON.stringify(mergedData));
+    setUserData(mergedData);
   };
 
   const handleRegister = async () => {
@@ -37,51 +35,63 @@ const App = () => {
 
     try {
       const response = await fetch("http://localhost:3001/register", {
-      method: "POST",
-      headers: {"Content-Type": "application/json" },
-      body: JSON.stringify({username, password}),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
       });
 
-      if(response.ok) {
+      if (response.ok) {
         setLoggedIn(true);
-    initializeUserData();
+        initializeUserData();
       } else {
         const error = await response.json();
         alert(error.error);
       }
     } catch (error) {
-      alert("error");
+      alert("Registration error occurred.");
     }
-  
   };
 
   const handleLogin = async () => {
     if (!username.trim() || !password.trim()) {
-      alert("Please enter a valid username.");
-      return
-    } try {
-      const response = await fetch ("http://localhost:3001/login", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-      });
+      alert("Please enter a valid username and password.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://localhost:3001/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`,
+        { method: "GET", headers: { "Content-Type": "application/json" } }
+      );
+
       if (response.ok) {
         const { user } = await response.json();
-        setUserData(user);
+        setUsername(user.username);
+        initializeUserData();
         setLoggedIn(true);
       } else {
         const error = await response.json();
-        alert(error.error);
+        alert(error.error || "Login failed.");
       }
     } catch (error) {
-      alert("Error logging in.");
+      alert("An error occurred during login.");
     }
   };
 
   const fetchQuestions = async () => {
     const response = await fetch("https://opentdb.com/api.php?amount=10");
     const data = await response.json();
-    setQuestions(data.results);
+    setQuestions(
+      data.results.map((q) => ({
+        ...q,
+        question: decodeHtmlEntities(q.question),
+      }))
+    );
+  };
+
+  const decodeHtmlEntities = (text) => {
+    const parser = new DOMParser();
+    return parser.parseFromString(text, "text/html").body.textContent || text;
   };
 
   const handleAnswer = async (selectedAnswer) => {
@@ -109,29 +119,22 @@ const App = () => {
       localStorage.setItem(username, JSON.stringify(updatedData));
       setScore(score + points);
 
-      // backend
       try {
         const response = await fetch("http://localhost:3001/update-score", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            username, 
-            points: updatedData.totalPoints 
-        }),
+          body: JSON.stringify({ username, points: updatedData.totalPoints }),
         });
-  
+
         if (!response.ok) {
           throw new Error("Failed to update score on the server.");
         }
-  
-        console.log("Score updated successfully on the server.");
       } catch (error) {
         console.error("Error updating score:", error);
       }
-  }
-  setCurrentQuestion(currentQuestion + 1);
-};
-
+    }
+    setCurrentQuestion(currentQuestion + 1);
+  };
 
   useEffect(() => {
     if (loggedIn) fetchQuestions();
