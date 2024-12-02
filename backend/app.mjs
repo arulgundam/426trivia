@@ -41,6 +41,12 @@ app.put('/update-score', async (req, res) => {
         return res.status(400).send({error: "username and points required."})
     }
 
+    let node = await db.get("SELECT username FROM users WHERE username = ?", [username]);
+
+    if (!node) {
+        return res.status(400).send("Player does not exiset")
+    }
+
     await db.run("UPDATE users SET points = ? WHERE usename = ?", [points, username]);
 });
 
@@ -54,7 +60,7 @@ app.get('/points/:username', async (req, res) => {
     let node = await db.get("SELECT points FROM users WHERE username = ?", [username]);
 
     if (!node) {
-        return res.status(400).send("Player does not have any points yet.")
+        return res.status(400).send("Player does not exist")
     }
 
     return res.json({ points: node.points });
@@ -70,7 +76,7 @@ app.delete('/username', async (req, res) => {
     let node = await db.get("SELECT username FROM users WHERE username = ?", [username]);
 
     if (!node) {
-        return res.status(400).send("Player does not have any points yet.")
+        return res.status(400).send("Player does not exist.")
     }
 
     await db.run("DELETE FROM users WHERE username = ?", [username]);
