@@ -37,7 +37,7 @@ const App = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("http://localhost:3001/register", {
       method: "POST",
       headers: {"Content-Type": "application/json" },
       body: JSON.stringify({username, password}),
@@ -61,7 +61,7 @@ const App = () => {
       alert("Please enter a valid username.");
       return
     } try {
-      const response = await fetch ("http://localhost:3000/login", {
+      const response = await fetch ("http://localhost:3001/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -112,7 +112,7 @@ const App = () => {
 
       // backend
       try {
-        const response = await fetch("http://localhost:3000/update-score", {
+        const response = await fetch("http://localhost:3001/update-score", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, points }),

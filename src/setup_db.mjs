@@ -5,7 +5,7 @@ async function initialize() {
             CREATE TABLE IF NOT EXISTS users (
                 username TEXT UNIQUE NOT NULL PRIMARY KEY,
                 points INTEGER NOT NULL,
-                password TEXT NOT NULL,
+                password TEXT NOT NULL
             );
         `);
 

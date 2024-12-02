@@ -1,14 +1,20 @@
 import express from 'express';
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
+import cors from 'cors';
 import { db } from './db.mjs';
 
 const app = express();
 
-const port = 3000;
+const port = 3001;
 
-app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+// connectDB(); //do we need this?
 
-connectDB(); //do we need this?
+app.get('/', (req, res) => {
+    res.send('Server is up and running!');
+  });
+
 
 app.post('/register', async (req, res) => {
     const { 
@@ -16,19 +22,17 @@ app.post('/register', async (req, res) => {
         password 
     } = req.body;
 
-  if (!username || !password) {
-    return res.status(400).send({ error: "Username and password are required." });
-  }
-
-  try {
-    const newUser = new User({ username, password });
-    await newUser.save();
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).send({ error: "Username already exists." });
+    if (!username || !password) {
+        return res.status(400).send({ error: "Username and password are required." });
     }
-  }
 
+    try {
+        const query = "INSERT INTO users (username, password, points) VALUES (?, ?, 0)";
+        await db.run(query, [username, password]);
+        res.status(201).send({ message: "User registered successfully." });
+    } catch (error) {
+        res.status(500).send({ error: "An error occurred during registration." });
+    }
 });
 
 app.put('/update-score', async (req, res) => {
@@ -52,7 +56,7 @@ app.get('/points/:username', async (req, res) => {
         return res.status(400).send("Player does not have any points yet.")
     }
 
-    return res.send(node.points);
+    return res.json({ points: node.points });
 });
 
 app.delete('/username', async (req, res) => {
@@ -74,5 +78,5 @@ app.delete('/username', async (req, res) => {
 
 
 app.listen(port, () => {
-    console.log('Running...');
+    console.log(`Server running on http://localhost:${port}`);
 })
