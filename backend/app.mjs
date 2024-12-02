@@ -34,11 +34,14 @@ app.post('/register', async (req, res) => {
 });
 
 app.put('/update-score', async (req, res) => {
-    const { username, points } = req.body;
+    let username = req.body.username;
+    let points = req.body.points;
 
     if (!username || points === undefined) {
         return res.status(400).send({error: "username and points required."})
     }
+
+    await db.run("UPDATE users SET points = ? WHERE usename = ?", [points, username]);
 });
 
 app.get('/points/:username', async (req, res) => {
