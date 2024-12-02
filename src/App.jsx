@@ -4,7 +4,6 @@ import Quiz from "./components/Quiz";
 import Results from "./components/Results";
 import Profile from "./components/Profile";
 
-
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -115,7 +114,10 @@ const App = () => {
         const response = await fetch("http://localhost:3001/update-score", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, points }),
+          body: JSON.stringify({ 
+            username, 
+            points: updatedData.totalPoints 
+        }),
         });
   
         if (!response.ok) {

@@ -1,6 +1,8 @@
 import { db } from './db.mjs';
 
 async function initialize() {
+    await db.run(`DROP TABLE IF EXISTS users`);
+    
     await db.run(`
             CREATE TABLE IF NOT EXISTS users (
                 username TEXT UNIQUE NOT NULL PRIMARY KEY,
