@@ -149,6 +149,31 @@ const App = () => {
   const goToQuiz = () => setCurrentPage("quiz");
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
+  const logout = () => {
+    setUsername("");
+    setPassword("");
+    setLoggedIn(false);
+    setUserData(null);
+  }
+   const deleteAccount = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/${username}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username })
+      });
+
+      if (response.ok) {
+        alert("Account successfully deleted");
+        logout();
+      } else {
+        alert("Account could not be deleted");
+      }
+
+      console.log("Score updated successfully on the server.");
+    } catch (error) {
+      alert("Error occurred");
+    } };
 
   if (!loggedIn) {
     return (
@@ -169,12 +194,13 @@ const App = () => {
         <h1>Welcome, {username}!</h1>
         <button onClick={goToQuiz}>Take Quiz</button>
         <button onClick={goToProfile}>Visit Profile</button>
+        <button onClick={logout}>Logout</button>
       </div>
     );
   }
 
   if (currentPage === "profile") {
-    return <Profile username={username} userData={userData} goToHome={goToHome} />;
+    return <Profile username={username} userData={userData} goToHome={goToHome} logout={logout} deleteAccount={deleteAccount}/>;
   }
 
   if (currentPage === "quiz") {
