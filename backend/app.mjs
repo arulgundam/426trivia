@@ -1,5 +1,4 @@
 import express from 'express';
-// import bodyParser from 'body-parser';
 import cors from 'cors';
 import { db } from './db.mjs';
 
@@ -9,7 +8,6 @@ const port = 3001;
 
 app.use(cors());
 app.use(express.json());
-// connectDB(); //do we need this?
 
 app.get('/', (req, res) => {
     res.send('Server is up and running!');
