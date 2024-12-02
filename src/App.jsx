@@ -56,27 +56,32 @@ const App = () => {
   };
 
   const handleLogin = async () => {
+    console.log("Called");
+
     if (!username.trim() || !password.trim()) {
-      alert("Please enter a valid username.");
-      return
-    } try {
-      const response = await fetch ("http://localhost:3001/login", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-      });
-      if (response.ok) {
-        const { user } = await response.json();
-        setUserData(user);
-        setLoggedIn(true);
-      } else {
-        const error = await response.json();
-        alert(error.error);
-      }
-    } catch (error) {
-      alert("Error logging in.");
+        alert("Please enter a valid username and password.");
+        return;
     }
-  };
+
+    try {
+        const response = await fetch(`http://localhost:3001/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+            method: "GET", // Keep GET method
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+            const { user } = await response.json();
+            setUserData(user);
+            setLoggedIn(true);
+        } else {
+            const error = await response.json();
+            alert(error.error || "Login failed.");
+        }
+    } catch (error) {
+        console.error("Login error:", error);
+        alert("An error occurred while logging in.");
+    }
+};
 
   const fetchQuestions = async () => {
     const response = await fetch("https://opentdb.com/api.php?amount=10");
