@@ -1,0 +1,52 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.my_profile {
+    font-weight: bold;
+    font-size: xx-large;
+    text-align: center;
+    padding: 10px;
+    background-color: blanchedalmond;
+}
+
+.total {
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+    padding: 10px; 
+}
+
+.button {
+    width: 250px;
+    padding: 12px;
+    margin: 8px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#home {
+    position: absolute;
+    left: 22%;
+    background-color:darkgreen;
+}
+
+#delete {
+    position: absolute;
+    left: 62%;
+    background-color:firebrick
+}
+
+#logout {
+    position: absolute;
+    left: 42%;
+}

@@ -3,13 +3,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    min-height: 700px;
     padding: 20px;
     background-color: #f5f5f5;
   }
   
   .Welcome_message {
-    font-size: 2.5rem;
+    font-size: xxx-large;
     color: #333;
     margin-bottom: 30px;
     text-align: center;
@@ -24,12 +24,6 @@
     border-radius: 4px;
     font-size: 16px;
     transition: border-color 0.3s ease;
-  }
-  
-  input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
   }
   
   .buttons {
@@ -49,17 +43,17 @@
   .buttons:hover {
     background-color: #0056b3;
   }
-  
-  .buttons:active {
-    transform: scale(0.98);
+
+  .questions {
+    width: 20%
   }
-  
-  @media (max-width: 480px) {
-    .Welcome_message {
-      font-size: 2rem;
-    }
-    
-    input, .buttons {
-      max-width: 250px;
-    }
-  }
+
+#pic1 {
+    position: absolute;
+    left: 8%; top: 30%;
+}
+
+#pic2 {
+    position: absolute;
+    left: 72%; top: 30%;
+}
