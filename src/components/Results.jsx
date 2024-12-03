@@ -23,10 +23,13 @@ const Results = ({ score, userData, restartQuiz, goToHome, questions }) => {
         />
       </p>
       <p>
-        {question.isCorrect
-          ? "✅ Correct"
-          : `❌ Wrong! Correct Answer: `}
-        <span dangerouslySetInnerHTML={{ __html: question.correct_answer }} />
+      {question.isCorrect ? (
+        "✅ Correct"
+      ) : (
+        <>
+          ❌ Wrong! Correct Answer: <span dangerouslySetInnerHTML={{ __html: question.correct_answer }} />
+      </>
+      )}
       </p>
     </li>
   ));
@@ -35,9 +38,6 @@ const Results = ({ score, userData, restartQuiz, goToHome, questions }) => {
     <div>
       <h2>Quiz Complete!</h2>
       <p>Your Score: {score}</p>
-      <h3>Total Points: {userData.totalPoints}</h3>
-      <h3>Points by Category:</h3>
-      <ul>{categoryPoints}</ul>
       <h3>Quiz Questions and Results:</h3>
       <ul>{quizResults}</ul>
       <button onClick={restartQuiz}>Play Again</button>

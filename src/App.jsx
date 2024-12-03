@@ -221,7 +221,6 @@ const App = () => {
     return (
       <div>
         <h1>Welcome, {username}!</h1>
-        <h2>Select Difficulty</h2>
         <button onClick={goToDifficulty}>Start Quiz</button>
         <button onClick={goToHome}>Home</button>
         <button onClick={goToProfile}>Profile</button>
