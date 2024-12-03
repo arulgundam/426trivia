@@ -3,6 +3,7 @@ import LoginForm from "./components/LoginForm";
 import Quiz from "./components/Quiz";
 import Results from "./components/Results";
 import Profile from "./components/Profile";
+import "./App.css";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -219,12 +220,12 @@ const App = () => {
 
   if (currentPage === "home") {
     return (
-      <div>
+      <div className="home">
         <h1>Welcome, {username}!</h1>
-        <button onClick={goToDifficulty}>Start Quiz</button>
-        <button onClick={goToHome}>Home</button>
-        <button onClick={goToProfile}>Profile</button>
-        <button onClick={logout}>Logout</button>
+        <button className="button" id="start" onClick={goToDifficulty}>Start Quiz</button>
+        <button className="button" id="go_home" onClick={goToHome}>Home</button>
+        <button className="button" id="profile" onClick={goToProfile}>Profile</button>
+        <button className="button" id="loggingout" onClick={logout}>Logout</button>
       </div>
     );
   }
@@ -254,10 +255,11 @@ const App = () => {
   if (currentPage === "selectDifficulty") {
     return (
       <div>
-          <button onClick={() => fetchQuestions("easy")}>Easy</button>
-          <button onClick={() => fetchQuestions("medium")}>Medium</button>
-          <button onClick={() => fetchQuestions("hard")}>Hard</button>
-        </div>
+        <p className="choose">Choose the level of difficulty for your trivia quiz!</p>
+        <button className="button" id="easy" onClick={() => fetchQuestions("easy")}>Easy</button>
+        <button className="button" id="medium" onClick={() => fetchQuestions("medium")}>Medium</button>
+        <button className="button" id="hard" onClick={() => fetchQuestions("hard")}>Hard</button>
+      </div>
     );
   }
   
