@@ -1,9 +1,10 @@
 import React from "react";
+import "./LoginForm.css";
 
 const LoginForm = ({ username, setUsername, password, setPassword, onRegister, onLogin }) => {
   return (
-    <div>
-      <h1>Welcome to Trivia!</h1>
+    <div  className="welcome">
+      <h1 className="Welcome_message">Welcome to Trivia!</h1>
       <input
         type="text"
         placeholder="Enter username"
@@ -16,8 +17,9 @@ const LoginForm = ({ username, setUsername, password, setPassword, onRegister, o
        value = {password}
        onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={onRegister}>Register</button>
-      <button onClick={onLogin}>Login</button>
+      <button class="buttons" onClick={onRegister}>Register</button>
+      <button class="buttons" onClick={onLogin}>Login</button>
+      <img src={"group_of_question_marks.png"} alt="Question Marks" />
     </div>
   );
 };
