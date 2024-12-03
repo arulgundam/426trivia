@@ -229,6 +229,7 @@ const App = () => {
         </div>
         <button onClick={goToQuiz}>Start Quiz</button>
         <button onClick={goToHome}>Home</button>
+        <button onClick={goToProfile}>Profile</button>
         <button onClick={logout}>Logout</button>
       </div>
     );
