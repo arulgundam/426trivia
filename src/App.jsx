@@ -68,7 +68,12 @@ const App = () => {
       if (response.ok) {
         const { user } = await response.json();
         setUsername(user.username);
-        initializeUserData();
+        const savedData = localStorage.getItem(user.username);
+        if (savedData) {
+            setUserData(JSON.parse(savedData));
+        } else {
+            initializeUserData(); 
+        }
         setLoggedIn(true);
       } else {
         const error = await response.json();
@@ -167,8 +172,6 @@ const App = () => {
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
   const logout = () => {
-    // Clear localStorage for the current user
-    localStorage.removeItem(username);
     setUsername("");
     setPassword("");
     setLoggedIn(false);
