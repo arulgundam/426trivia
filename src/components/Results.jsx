@@ -1,16 +1,33 @@
 import React from "react";
 
-const Results = ({ score, userData, restartQuiz, goToHome }) => {
+const Results = ({ score, userData, restartQuiz, goToHome, questions }) => {
+  if (!questions || questions.length === 0) {
+    return <p>No results available.</p>; // Fallback in case questions data is missing
+  }
+
   const categoryPoints = Object.entries(userData.categoryPoints).map(
     ([category, points]) => (
       <li key={category}>{`${category}: ${points}`}</li>
     )
   );
 
-  const correctAnswers = userData.correctAnswers.map((answer, index) => (
+  const quizResults = questions.map((question, index) => (
     <li key={index}>
-      {`${answer.category}: `}
-      <span dangerouslySetInnerHTML={{ __html: answer.question }}></span>
+      <p dangerouslySetInnerHTML={{ __html: question.question }}></p>
+      <p>
+        Your Answer:{" "}
+        <span
+          dangerouslySetInnerHTML={{
+            __html: question.userAnswer || "Not answered",
+          }}
+        />
+      </p>
+      <p>
+        {question.isCorrect
+          ? "✅ Correct"
+          : `❌ Wrong! Correct Answer: `}
+        <span dangerouslySetInnerHTML={{ __html: question.correct_answer }} />
+      </p>
     </li>
   ));
 
@@ -21,8 +38,8 @@ const Results = ({ score, userData, restartQuiz, goToHome }) => {
       <h3>Total Points: {userData.totalPoints}</h3>
       <h3>Points by Category:</h3>
       <ul>{categoryPoints}</ul>
-      <h3>Correct Answers:</h3>
-      <ul>{correctAnswers}</ul>
+      <h3>Quiz Questions and Results:</h3>
+      <ul>{quizResults}</ul>
       <button onClick={restartQuiz}>Play Again</button>
       <button onClick={goToHome}>Home Page</button>
     </div>
