@@ -1,4 +1,4 @@
-const Profile = ({ username, userData, goToHome }) => {
+const Profile = ({ username, userData, goToHome, logout, deleteAccount}) => {
   if (!userData) return <p>Loading profile...</p>;
 
   return (
@@ -12,6 +12,8 @@ const Profile = ({ username, userData, goToHome }) => {
         </p>
       ))}
       <button onClick={goToHome}>Go Home</button>
+      <button onClick={logout}>Logout</button>
+      <button onClick={deleteAccount}>DeleteAccount</button>
     </div>
   );
 };

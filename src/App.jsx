@@ -15,17 +15,17 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState("home");
 
   const initializeUserData = () => {
-    const storedData = JSON.parse(localStorage.getItem(username));
     const initialData = {
-      totalPoints: 0,
-      categoryPoints: {},
-      correctAnswers: [],
+        totalPoints: 0,
+        categoryPoints: {},
+        correctAnswers: [],
     };
 
-    const mergedData = { ...initialData, ...storedData };
-    localStorage.setItem(username, JSON.stringify(mergedData));
-    setUserData(mergedData);
-  };
+    // Overwrite any existing data for this username
+    localStorage.setItem(username, JSON.stringify(initialData));
+    setUserData(initialData);
+};
+
 
   const handleRegister = async () => {
     if (!username.trim() || !password.trim()) {
@@ -166,6 +166,37 @@ const App = () => {
   const goToQuiz = () => setCurrentPage("quiz");
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
+  const logout = () => {
+    // Clear localStorage for the current user
+    localStorage.removeItem(username);
+    setUsername("");
+    setPassword("");
+    setLoggedIn(false);
+    setUserData(null);
+};
+
+  
+  const deleteAccount = async () => {
+    try {
+        const response = await fetch(`http://localhost:3001/username/${username}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        if (response.ok) {
+            alert("Account successfully deleted");
+            // Clear localStorage for the deleted user
+            localStorage.removeItem(username);
+            logout();
+        } else {
+            alert("Account could not be deleted");
+        }
+    } catch (error) {
+        alert("Error occurred while deleting the account.");
+    }
+};
+
+
 
   if (!loggedIn) {
     return (
@@ -186,12 +217,13 @@ const App = () => {
         <h1>Welcome, {username}!</h1>
         <button onClick={goToQuiz}>Take Quiz</button>
         <button onClick={goToProfile}>Visit Profile</button>
+        <button onClick={logout}>Logout</button>
       </div>
     );
   }
 
   if (currentPage === "profile") {
-    return <Profile username={username} userData={userData} goToHome={goToHome} />;
+    return <Profile username={username} userData={userData} goToHome={goToHome} logout={logout} deleteAccount={deleteAccount}/>;
   }
 
   if (currentPage === "quiz") {
