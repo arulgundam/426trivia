@@ -170,7 +170,7 @@ const App = () => {
   const restartQuiz = () => {
     setCurrentQuestion(0);
     setScore(0);
-    fetchQuestions();
+    setCurrentPage("selectDifficulty");
   };
 
   const goToQuiz = () => {setCurrentPage("quiz");}
@@ -244,7 +244,7 @@ const App = () => {
       <Results
         score={score}
         userData={userData}
-        restartQuiz={() => setCurrentQuestion(0)}
+        restartQuiz={restartQuiz}
         goToHome={goToHome}
         questions={questions}
       />
