@@ -32,14 +32,14 @@ const App = () => {
       alert("Please enter a valid username and password.");
       return;
     }
-
+  
     try {
       const response = await fetch("http://localhost:3001/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-
+  
       if (response.ok) {
         setLoggedIn(true);
         initializeUserData();
@@ -48,9 +48,10 @@ const App = () => {
         alert(error.error);
       }
     } catch (error) {
-      alert("Registration error occurred.");
+      alert("An error occurred during registration.");
     }
   };
+  
 
   const handleLogin = async () => {
     if (!username.trim() || !password.trim()) {

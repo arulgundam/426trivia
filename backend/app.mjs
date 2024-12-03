@@ -37,10 +37,7 @@ app.get('/login', async (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-    const { 
-        username, 
-        password 
-    } = req.body;
+    const { username, password } = req.body;
 
     if (!username || !password) {
         return res.status(400).send({ error: "Username and password are required." });
@@ -51,9 +48,14 @@ app.post('/register', async (req, res) => {
         await db.run(query, [username, password]);
         res.status(201).send({ message: "User registered successfully." });
     } catch (error) {
+        if (error.message.includes("UNIQUE constraint failed")) {
+            return res.status(400).send({ error: "An account with this username already exists." });
+        }
+        console.error("Error during registration:", error);
         res.status(500).send({ error: "An error occurred during registration." });
     }
 });
+
 
 app.put('/update-score', async (req, res) => {
     let username = req.body.username;
