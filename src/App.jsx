@@ -15,17 +15,17 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState("home");
 
   const initializeUserData = () => {
-    const storedData = JSON.parse(localStorage.getItem(username));
     const initialData = {
-      totalPoints: 0,
-      categoryPoints: {},
-      correctAnswers: [],
+        totalPoints: 0,
+        categoryPoints: {},
+        correctAnswers: [],
     };
 
-    const mergedData = { ...initialData, ...storedData };
-    localStorage.setItem(username, JSON.stringify(mergedData));
-    setUserData(mergedData);
-  };
+    // Overwrite any existing data for this username
+    localStorage.setItem(username, JSON.stringify(initialData));
+    setUserData(initialData);
+};
+
 
   const handleRegister = async () => {
     if (!username.trim() || !password.trim()) {
@@ -150,30 +150,36 @@ const App = () => {
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
   const logout = () => {
+    // Clear localStorage for the current user
+    localStorage.removeItem(username);
     setUsername("");
     setPassword("");
     setLoggedIn(false);
     setUserData(null);
-  }
-   const deleteAccount = async () => {
+};
+
+  
+  const deleteAccount = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/${username}`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username })
-      });
+        const response = await fetch(`http://localhost:3001/username/${username}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        });
 
-      if (response.ok) {
-        alert("Account successfully deleted");
-        logout();
-      } else {
-        alert("Account could not be deleted");
-      }
-
-      console.log("Score updated successfully on the server.");
+        if (response.ok) {
+            alert("Account successfully deleted");
+            // Clear localStorage for the deleted user
+            localStorage.removeItem(username);
+            logout();
+        } else {
+            alert("Account could not be deleted");
+        }
     } catch (error) {
-      alert("Error occurred");
-    } };
+        alert("Error occurred while deleting the account.");
+    }
+};
+
+
 
   if (!loggedIn) {
     return (

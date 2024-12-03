@@ -95,22 +95,28 @@ app.get('/points/:username', async (req, res) => {
     return res.json({ points: node.points });
 });
 
-app.delete('/username', async (req, res) => {
-    let username = req.body.username;
+app.delete('/username/:username', async (req, res) => {
+    const { username } = req.params;
 
     if (!username) {
         return res.status(400).send("Username does not exist.");
     }
 
-    let node = await db.get("SELECT username FROM users WHERE username = ?", [username]);
+    try {
+        const node = await db.get("SELECT username FROM users WHERE username = ?", [username]);
 
-    if (!node) {
-        return res.status(400).send("Player does not exist.")
+        if (!node) {
+            return res.status(404).send("Player does not exist.");
+        }
+
+        await db.run("DELETE FROM users WHERE username = ?", [username]);
+        return res.status(200).send("User deleted successfully.");
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        return res.status(500).send("An error occurred while deleting the user.");
     }
-
-    await db.run("DELETE FROM users WHERE username = ?", [username]);
-    return res.status(200).send("User deleted successfully.");
 });
+
 
 
 app.listen(port, () => {
