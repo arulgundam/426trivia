@@ -101,7 +101,16 @@ const App = () => {
     const difficulty = currentQ.difficulty;
     const category = currentQ.category;
     const points = difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 3;
-
+  
+    // Update the question with the user's answer
+    const updatedQuestions = [...questions];
+    updatedQuestions[currentQuestion] = {
+      ...currentQ,
+      userAnswer: selectedAnswer,
+      isCorrect,
+    };
+    setQuestions(updatedQuestions);
+  
     if (isCorrect) {
       const updatedData = {
         ...userData,
@@ -115,27 +124,34 @@ const App = () => {
           { category, question: currentQ.question },
         ],
       };
-
+  
       setUserData(updatedData);
       localStorage.setItem(username, JSON.stringify(updatedData));
       setScore(score + points);
-
+  
+      // Backend
       try {
         const response = await fetch("http://localhost:3001/update-score", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, points: updatedData.totalPoints }),
+          body: JSON.stringify({
+            username,
+            points: updatedData.totalPoints,
+          }),
         });
-
+  
         if (!response.ok) {
           throw new Error("Failed to update score on the server.");
         }
+  
+        console.log("Score updated successfully on the server.");
       } catch (error) {
         console.error("Error updating score:", error);
       }
     }
     setCurrentQuestion(currentQuestion + 1);
   };
+  
 
   useEffect(() => {
     if (loggedIn) fetchQuestions();
@@ -186,9 +202,16 @@ const App = () => {
         handleAnswer={handleAnswer}
       />
     ) : (
-      <Results score={score} userData={userData} restartQuiz={restartQuiz} goToHome={goToHome} />
+      <Results
+        score={score}
+        userData={userData}
+        restartQuiz={restartQuiz}
+        goToHome={goToHome}
+        questions={questions} // Ensure questions prop is passed
+      />
     );
   }
+  
 
   return null;
 };
