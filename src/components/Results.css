@@ -1,4 +1,4 @@
-.profile {
+.results {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -6,25 +6,29 @@
     padding: 20px;
 }
 
-.my_profile {
-    font-weight: bold;
-    font-size: xx-large;
+.done {
     text-align: center;
-    padding: 10px;
-    background-color: blanchedalmond;
+    list-style-type: none;
 }
 
-.total {
+.your_score {
     font-weight: bold;
     font-size: x-large;
-    text-align: center;
-    padding: 10px; 
 }
-.buttons {
+
+.complete {
+    background-color: seagreen;
+    padding: 20px;
+}
+
+.more_buttons {
+    padding: 20px;
+    font-weight: bold;
+    font-size: xx-large;
+    color: white;
     width: 250px;
     padding: 12px;
     margin: 8px 0;
-    color: white;
     border: none;
     border-radius: 4px;
     font-size: 16px;
@@ -32,32 +36,22 @@
     transition: background-color 0.3s ease;
 }
 
-#home {
+#my_home {
     position: absolute;
-    left: 2%; top: 2%;
+    left: 2%; top: 5%;
     background-color:green;
 }
 
-#home:hover {
+#my_home:hover {
     background-color: darkgreen;
 }
 
-#delete {
+#again {
     position: absolute;
-    left: 80%; top: 10%;
-    background-color:crimson
-}
-
-#delete {
-    background-color: firebrick;
-}
-
-#logout {
-    position: absolute;
-    left: 80%; top: 2%;
+    left: 80%; top: 5%;
     background-color: #007bff;
 }
 
-#logout:hover {
+#again:hover {
     background-color: mediumblue;
 }

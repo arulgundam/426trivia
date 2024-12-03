@@ -1,4 +1,5 @@
 import React from "react";
+import "./Results.css";
 
 const Results = ({ score, userData, restartQuiz, goToHome, questions }) => {
   if (!questions || questions.length === 0) {
@@ -35,13 +36,13 @@ const Results = ({ score, userData, restartQuiz, goToHome, questions }) => {
   ));
 
   return (
-    <div>
-      <h2>Quiz Complete!</h2>
-      <p>Your Score: {score}</p>
+    <div className="results">
+      <h2 className="complete">Quiz Complete!</h2>
+      <p className="your_score">Your Score: {score}</p>
       <h3>Quiz Questions and Results:</h3>
-      <ul>{quizResults}</ul>
-      <button onClick={restartQuiz}>Play Again</button>
-      <button onClick={goToHome}>Home Page</button>
+      <ul className="done">{quizResults}</ul>
+      <button className="more_buttons" id="again" onClick={restartQuiz}>Play Again</button>
+      <button className="more_buttons" id="my_home" onClick={goToHome}>Home Page</button>
     </div>
   );
 };

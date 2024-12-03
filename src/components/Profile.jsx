@@ -13,9 +13,9 @@ const Profile = ({ username, userData, goToHome, logout, deleteAccount}) => {
           {category}: {points}
         </p>
       ))}
-      <button className="button" id="home"onClick={goToHome}>Go Home</button>
-      <button className="button" id="logout"onClick={logout}>Logout</button>
-      <button className="button" id="delete"onClick={deleteAccount}>DeleteAccount</button>
+      <button className="buttons" id="home"onClick={goToHome}>Go Home</button>
+      <button className="buttons" id="logout"onClick={logout}>Logout</button>
+      <button className="buttons" id="delete"onClick={deleteAccount}>DeleteAccount</button>
     </div>
   );
 };

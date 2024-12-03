@@ -223,7 +223,6 @@ const App = () => {
       <div className="home">
         <h1>Welcome, {username}!</h1>
         <button className="button" id="start" onClick={goToDifficulty}>Start Quiz</button>
-        <button className="button" id="go_home" onClick={goToHome}>Home</button>
         <button className="button" id="profile" onClick={goToProfile}>Profile</button>
         <button className="button" id="loggingout" onClick={logout}>Logout</button>
       </div>

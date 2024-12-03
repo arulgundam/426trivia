@@ -1,0 +1,24 @@
+.quiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.answers {
+    width: 250px;
+    padding: 12px;
+    margin: 8px 0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #007bff;
+    transition: background-color 0.3s ease;
+}
+
+.answers:hover {
+    background-color: mediumblue;
+}

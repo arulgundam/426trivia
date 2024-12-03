@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Quiz.css";
 
 const Quiz = ({ questions, currentQuestion, handleAnswer }) => {
   const question = questions[currentQuestion];
@@ -15,15 +16,15 @@ const Quiz = ({ questions, currentQuestion, handleAnswer }) => {
   }`;
 
   return (
-    <div>
-      <h1>Trivia Quiz</h1>
+    <div className="quiz">
+      <h1 className="my_profile">Trivia Quiz</h1>
       <h3>Difficulty: {question.difficulty}</h3>
       <h2 dangerouslySetInnerHTML={{ __html: question.question }}></h2>
       {question.incorrect_answers
         .concat(question.correct_answer)
         .sort(() => Math.random() - 0.5)
         .map((answer, index) => (
-          <button
+          <button className="answers"
             key={index}
             onClick={() => handleAnswerClick(answer)}
             dangerouslySetInnerHTML={{ __html: answer }}
