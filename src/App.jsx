@@ -85,7 +85,7 @@ const App = () => {
     }
   };
 
-  const fetchQuestions = async () => {
+  const fetchQuestions = async (difficulty) => {
     const response = await fetch(`https://opentdb.com/api.php?amount=10&difficulty=${difficulty}`);
     const data = await response.json();
     setQuestions(
@@ -94,6 +94,9 @@ const App = () => {
         question: decodeHtmlEntities(q.question),
       }))
     );
+    setCurrentQuestion(0);
+      setScore(0);
+      setCurrentPage("quiz");
   };
 
   const decodeHtmlEntities = (text) => {
@@ -172,6 +175,7 @@ const App = () => {
   const goToQuiz = () => {setCurrentPage("quiz");}
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
+  const goToDifficulty = () => setCurrentPage("selectDifficulty");
   const logout = () => {
     setUsername("");
     setPassword("");
@@ -200,10 +204,6 @@ const App = () => {
     }
 };
 
-
-
-
-
   if (!loggedIn) {
     return (
       <LoginForm
@@ -222,12 +222,7 @@ const App = () => {
       <div>
         <h1>Welcome, {username}!</h1>
         <h2>Select Difficulty</h2>
-        <div>
-          <button onClick={() => setDifficulty("easy")}>Easy</button>
-          <button onClick={() => setDifficulty("medium")}>Medium</button>
-          <button onClick={() => setDifficulty("hard")}>Hard</button>
-        </div>
-        <button onClick={goToQuiz}>Start Quiz</button>
+        <button onClick={goToDifficulty}>Start Quiz</button>
         <button onClick={goToHome}>Home</button>
         <button onClick={goToProfile}>Profile</button>
         <button onClick={logout}>Logout</button>
@@ -254,6 +249,16 @@ const App = () => {
         goToHome={goToHome}
         questions={questions}
       />
+    );
+  }
+
+  if (currentPage === "selectDifficulty") {
+    return (
+      <div>
+          <button onClick={() => fetchQuestions("easy")}>Easy</button>
+          <button onClick={() => fetchQuestions("medium")}>Medium</button>
+          <button onClick={() => fetchQuestions("hard")}>Hard</button>
+        </div>
     );
   }
   
