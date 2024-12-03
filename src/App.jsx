@@ -13,6 +13,7 @@ const App = () => {
   const [score, setScore] = useState(0);
   const [userData, setUserData] = useState(null);
   const [currentPage, setCurrentPage] = useState("home");
+  const [difficulty, setDifficulty] = useState("");
 
   const initializeUserData = () => {
     const initialData = {
@@ -80,7 +81,7 @@ const App = () => {
   };
 
   const fetchQuestions = async () => {
-    const response = await fetch("https://opentdb.com/api.php?amount=10");
+    const response = await fetch(`https://opentdb.com/api.php?amount=10&difficulty=${difficulty}`);
     const data = await response.json();
     setQuestions(
       data.results.map((q) => ({
@@ -154,8 +155,8 @@ const App = () => {
   
 
   useEffect(() => {
-    if (loggedIn) fetchQuestions();
-  }, [loggedIn]);
+    if (loggedIn && difficulty) fetchQuestions();
+  }, [loggedIn, difficulty]);
 
   const restartQuiz = () => {
     setCurrentQuestion(0);
@@ -163,7 +164,7 @@ const App = () => {
     fetchQuestions();
   };
 
-  const goToQuiz = () => setCurrentPage("quiz");
+  const goToQuiz = () => {setCurrentPage("quiz");}
   const goToProfile = () => setCurrentPage("profile");
   const goToHome = () => setCurrentPage("home");
   const logout = () => {
@@ -198,6 +199,8 @@ const App = () => {
 
 
 
+
+
   if (!loggedIn) {
     return (
       <LoginForm
@@ -215,8 +218,14 @@ const App = () => {
     return (
       <div>
         <h1>Welcome, {username}!</h1>
-        <button onClick={goToQuiz}>Take Quiz</button>
-        <button onClick={goToProfile}>Visit Profile</button>
+        <h2>Select Difficulty</h2>
+        <div>
+          <button onClick={() => setDifficulty("easy")}>Easy</button>
+          <button onClick={() => setDifficulty("medium")}>Medium</button>
+          <button onClick={() => setDifficulty("hard")}>Hard</button>
+        </div>
+        <button onClick={goToQuiz}>Start Quiz</button>
+        <button onClick={goToHome}>Home</button>
         <button onClick={logout}>Logout</button>
       </div>
     );
@@ -237,9 +246,9 @@ const App = () => {
       <Results
         score={score}
         userData={userData}
-        restartQuiz={restartQuiz}
+        restartQuiz={() => setCurrentQuestion(0)}
         goToHome={goToHome}
-        questions={questions} // Ensure questions prop is passed
+        questions={questions}
       />
     );
   }
