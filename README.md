@@ -4,6 +4,6 @@ We have created a trivia game that allows you to create an account and test your
 
 If you logout, and log back in with the same username and password, your total points are saved and stored in the profile tab. You can also delete your account, wiping away your username, password, and total points from the database. 
 
-Here is the link to watch the presentation of our web application - {https://youtu.be/8NNq04xDdaY}.
+Here is the link to watch the presentation of our web application - https://youtu.be/8NNq04xDdaY.
 
-The API is - {https://opentdb.com/api_config.php}.
+The API is - https://opentdb.com/api_config.php.
