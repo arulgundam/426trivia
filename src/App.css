@@ -71,10 +71,18 @@
 #profile {
     background-color:orange;
 }
-
-#go_home {
-    background-color:darkgreen;
-}
 #start {
     background-color: darkorchid;
+}
+
+#start:hover {
+    background-color: blueviolet;
+}
+
+#profile:hover {
+    background-color: darkorange;
+}
+
+#loggingout:hover {
+    background-color: #0056b3;
 }

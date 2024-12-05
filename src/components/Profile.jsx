@@ -15,7 +15,7 @@ const Profile = ({ username, userData, goToHome, logout, deleteAccount}) => {
       ))}
       <button className="buttons" id="home"onClick={goToHome}>Go Home</button>
       <button className="buttons" id="logout"onClick={logout}>Logout</button>
-      <button className="buttons" id="delete"onClick={deleteAccount}>DeleteAccount</button>
+      <button className="buttons" id="delete"onClick={deleteAccount}>Delete Account</button>
     </div>
   );
 };
