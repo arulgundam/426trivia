@@ -182,6 +182,7 @@ const App = () => {
     setPassword("");
     setLoggedIn(false);
     setUserData(null);
+    setCurrentPage("home");
 };
 
   
